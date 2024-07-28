@@ -1,8 +1,7 @@
-import 'package:calculadora/presentation/widgets/footer.dart';
-import 'package:calculadora/presentation/widgets/operation_input.dart';
 import 'package:calculadora/presentation/widgets/operation_selector.dart';
 import 'package:calculadora/presentation/widgets/result_display.dart';
 import 'package:calculadora/presentation/widgets/number_input.dart';
+import 'package:calculadora/presentation/widgets/footer.dart';
 import 'package:flutter/material.dart';
 import '../../data/calculator_service.dart';
 
@@ -53,6 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _updateOperation(Operation? operation) {
+    if (operation != null) {
+      setState(() {
+        _selectedOperation = operation;
+        _result = 0.0; // Reset the result when changing the operation
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              ResultDisplay(result: _result),
+              ResultDisplay(
+                result: _result,
+                isDivision: _selectedOperation == Operation.divide,
+              ),
               SizedBox(height: 16),
               Row(
                 children: [
@@ -90,15 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 16),
-              OperationInput(
+              OperationSelector(
                 selectedOperation: _selectedOperation,
-                onChanged: (operation) {
-                  if (operation != null) {
-                    setState(() {
-                      _selectedOperation = operation;
-                    });
-                  }
-                },
+                onChanged: _updateOperation,
               ),
               SizedBox(height: 16),
               Row(
@@ -128,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 56),
+              SizedBox(height: 16),
               Footer(),
             ],
           ),

@@ -35,6 +35,8 @@ class OperationSelector extends StatelessWidget {
         return 'Multiplicación';
       case Operation.divide:
         return 'División';
+      default:
+        return '';
     }
   }
 }
